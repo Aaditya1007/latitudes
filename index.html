@@ -18,6 +18,7 @@
   --map-land:#E3DFD4; --map-dot:#9E9A90; --map-water:#F8F6F1; --pin-ring:#FFFFFF;
   --paper-deep:#8EA9B3; --paper-r3:#A3BBC3; --paper-r2:#B8CDD2; --paper-r1:#CDDDDF;
   --paper-l1:#F5F0E4; --paper-l2:#EAE2CE; --paper-l3:#DED3B8; --paper-shadow:rgba(38,48,54,.34);
+  --t-lite:#EFE8D8; --t-dark:#B9AD93; --t-snow:#FFFFFF; --t-tree:#7E9472; --t-tree2:#5F7556; --t-sand:#C9A877; --t-ice:#DCEBF0; --t-wave:#6F93A1; --t-label:#6B6252; --t-sea:#4E7180;
   --stitch:#BF4A30; --card:#FBF8F1; --film:#16130F; --edge:#D9973A; --grease:#D23B2A; --grain:.42;
   --sans:"Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
   --serif:"Newsreader", Georgia, "Times New Roman", serif;
@@ -33,7 +34,7 @@
     --map-land:#292825; --map-dot:#5F5C56; --map-water:#121312; --pin-ring:#2A2926;
     --paper-deep:#0B1418; --paper-r3:#102028; --paper-r2:#152933; --paper-r1:#1B3440;
     --paper-l1:#36342F; --paper-l2:#3E3B35; --paper-l3:#47433C; --paper-shadow:rgba(0,0,0,.62);
-    --stitch:#E27D60; --card:#E8E2D5; --film:#0C0B09; --edge:#C98A33; --grease:#EF5B45; --grain:.6;
+    --t-lite:#5A564D; --t-dark:#2C2A26; --t-snow:#D9D6CE; --t-tree:#56684F; --t-tree2:#3D4C39; --t-sand:#8C7650; --t-ice:#A9BFC6; --t-wave:#3E6170; --t-label:#B9B1A2; --t-sea:#7FA5B5; --stitch:#E27D60; --card:#E8E2D5; --film:#0C0B09; --edge:#C98A33; --grease:#EF5B45; --grain:.6;
   }
 }
 :root[data-theme="dark"]{
@@ -43,7 +44,7 @@
   --map-land:#292825; --map-dot:#5F5C56; --map-water:#121312; --pin-ring:#2A2926;
   --paper-deep:#0B1418; --paper-r3:#102028; --paper-r2:#152933; --paper-r1:#1B3440;
   --paper-l1:#36342F; --paper-l2:#3E3B35; --paper-l3:#47433C; --paper-shadow:rgba(0,0,0,.62);
-  --stitch:#E27D60; --card:#E8E2D5; --film:#0C0B09; --edge:#C98A33; --grease:#EF5B45; --grain:.6;
+  --t-lite:#5A564D; --t-dark:#2C2A26; --t-snow:#D9D6CE; --t-tree:#56684F; --t-tree2:#3D4C39; --t-sand:#8C7650; --t-ice:#A9BFC6; --t-wave:#3E6170; --t-label:#B9B1A2; --t-sea:#7FA5B5; --stitch:#E27D60; --card:#E8E2D5; --film:#0C0B09; --edge:#C98A33; --grease:#EF5B45; --grain:.6;
 }
 *,*::before,*::after{box-sizing:inherit}
 [hidden]{display:none!important}
@@ -397,10 +398,12 @@ footer.foot{border-top:1px solid var(--line);padding:28px 0 48px;display:flex;fl
 .pop{position:relative;margin:0;width:min(100%,calc(84vh * var(--ar)));aspect-ratio:calc(var(--ar) / (1 - var(--ct,0)));justify-self:center;--edge:clamp(7px,.8vw,12px)}
 .pop-frame{position:absolute;left:0;right:0;bottom:0;top:calc((var(--top) - var(--ct,0)) / (1 - var(--ct,0)) * 100%);padding:0;border:0;overflow:hidden;background:var(--tile);cursor:zoom-in;box-shadow:0 0 0 var(--edge) var(--card),0 28px 46px -16px rgba(0,0,0,.45)}
 .pop-frame img{position:absolute;left:0;bottom:0;width:100%;height:calc(100% / (1 - var(--top)));object-fit:cover}
-.pop-cutw{position:absolute;inset:0;z-index:2;pointer-events:none;filter:drop-shadow(0 8px 9px rgba(0,0,0,.3))}
-.pop-cutw img{position:absolute;left:0;width:100%;top:calc(var(--ct,0) / (1 - var(--ct,0)) * -100%);height:calc(100% / (1 - var(--ct,0)));clip-path:inset(0 0 calc((1 - var(--top)) * 100% - var(--edge)) 0)}
+/* the cut-out ends exactly at the frame's top edge, and its shadow is clipped there too, so the photo continues seamlessly */
+.pop{--ft:calc((var(--top) - var(--ct,0)) / (1 - var(--ct,0)))}
+.pop-cutw{position:absolute;inset:0;z-index:2;pointer-events:none;filter:drop-shadow(0 6px 8px rgba(0,0,0,.28));clip-path:inset(-80px -80px calc((1 - var(--ft)) * 100%) -80px)}
+.pop-cutw img{position:absolute;left:0;width:100%;top:calc(var(--ct,0) / (1 - var(--ct,0)) * -100%);height:calc(100% / (1 - var(--ct,0)))}
 .b-pop.reveal .pop-frame{opacity:0;transform:translateY(24px);transition:opacity .8s,transform 1s var(--ease)}
-.b-pop.reveal .pop-cutw{opacity:0;transform:translateY(16%) scaleY(.55);transform-origin:50% calc(var(--top) * 100%);transition:opacity .45s .55s,transform 1.15s cubic-bezier(.2,1.3,.35,1) .55s}
+.b-pop.reveal .pop-cutw{opacity:0;transform:scaleY(.4);transform-origin:50% calc(var(--ft) * 100%);transition:opacity .45s .55s,transform 1.15s cubic-bezier(.2,1.3,.35,1) .55s}
 .b-pop.reveal.in .pop-frame,.b-pop.reveal.in .pop-cutw{opacity:1;transform:none}
 @media (max-width:700px){
   .b-pop,.b-pop.land{grid-template-columns:1fr;gap:22px}
@@ -467,6 +470,15 @@ footer.foot{border-top:1px solid var(--line);padding:28px 0 48px;display:flex;fl
 .cb.soon{font-style:italic}
 .cb .sn{font-size:9px;letter-spacing:.08em;padding:1px 5px;border-radius:999px;border:1px solid currentColor;opacity:.7}
 .tb-spacer{margin-left:auto}
+.cflag{display:inline-block;height:.95em;width:auto;vertical-align:-.12em;border-radius:1.5px;box-shadow:0 0 0 1px rgba(0,0,0,.12);flex:none}
+.cb .cflag{height:11px;margin-right:2px}
+.cb.on .cflag{box-shadow:0 0 0 1px rgba(255,255,255,.4)}
+.hero-countries .cflag{height:12px;margin-right:6px}
+.c-flag{display:block;width:auto;position:absolute;left:50%;top:clamp(26px,4vw,60px);z-index:2;height:clamp(26px,3vw,42px);width:auto;transform:translateX(-50%) rotate(-3deg);border:4px solid var(--card);box-shadow:0 8px 16px -6px rgba(0,0,0,.4)}
+.c-head.nocut .c-flag{position:static;display:block;margin:0 auto 18px;transform:rotate(-3deg)}
+.soon-name .cflag{display:block;height:clamp(30px,3.4vw,48px);margin:0 auto 20px;border:4px solid var(--card);transform:rotate(-3deg);box-shadow:0 8px 16px -6px rgba(0,0,0,.4)}
+.ticket .to .cflag{height:.6em;margin-right:.3em;vertical-align:.05em}
+.chpill-list .cflag{height:11px;margin-right:4px}
 .hero-countries button.soon{opacity:.62;font-style:italic}
 .hero-countries button.soon::after{content:" · soon";font-size:.85em}
 
@@ -623,7 +635,7 @@ body.lb-on .cursor,body.studio-on .cursor{display:none}
 @keyframes stand{from{transform:rotateX(-92deg)}to{transform:rotateX(0)}}
 .mapv.pre .pin{opacity:0}
 .mapv.unfold{animation:unfold 1.05s cubic-bezier(.2,.8,.2,1) both;transform-origin:50% 100%}
-@keyframes unfold{from{transform:perspective(1000px) rotateX(48deg) scale(.96);opacity:0}35%{opacity:1}to{transform:none;opacity:1}}
+@keyframes unfold{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
 
 /* ---------- viewer ---------- */
 .lb{position:fixed;inset:0;z-index:100;color:#ECECE8;--panel:#1B1C1E}
@@ -1266,7 +1278,7 @@ function renderHero(){
   const nav = $("#heroCountries"), nkey = cs.map(c => c.key).join();
   if (nav._key !== nkey){
     nav._key = nkey;
-    nav.innerHTML = cs.filter(c => c.key !== "_elsewhere").map((c, i) => `<button type="button" class="${c.soon ? "soon" : ""}" data-c="${esc(c.key)}" style="--rot:${[-2, 1.5, -1, 2.5][i % 4]}deg">${esc(c.name)}</button>`).join("");
+    nav.innerHTML = cs.filter(c => c.key !== "_elsewhere").map((c, i) => `<button type="button" class="${c.soon ? "soon" : ""}" data-c="${esc(c.key)}" style="--rot:${[-2, 1.5, -1, 2.5][i % 4]}deg">${flagSvg(c.key)}${esc(c.name)}</button>`).join("");
     nav.querySelectorAll("button").forEach(b => b.onclick = () => goCountry(b.dataset.c));
   }
   if (ready && !S.introPlayed){ S.introPlayed = true; playIntro(); }
@@ -1275,6 +1287,7 @@ function goCountry(k){
   const changed = S.country !== k;
   S.country = k;
   try { history.replaceState(null, "", "#" + encodeURIComponent(k)); } catch (e) {}
+  if (changed && window.goatcounter && window.goatcounter.count) try { window.goatcounter.count({ path: location.pathname + "#" + k }); } catch (e) {}
   const top = $("#toolbar").getBoundingClientRect().top + scrollY;
   if (S.mode !== "stories" || S.query){ S.mode = "stories"; renderToolbar(); }
   if (changed || $("#content")._view !== "stories"){
@@ -1283,7 +1296,7 @@ function goCountry(k){
     if (RM.matches) go(); else { c.classList.add("swap"); setTimeout(go, 160); }
   } else scrollTo({ top, behavior: RM.matches ? "auto" : "smooth" });
 }
-addEventListener("hashchange", () => { const k = decodeURIComponent(location.hash.slice(1)); if (k && k !== S.country && countries().some(c => c.key === k)) goCountry(k); });
+addEventListener("hashchange", () => { const k = decodeURIComponent(location.hash.slice(1)); if (k && (k !== S.country || S.mode !== "stories") && countries().some(c => c.key === k)) goCountry(k); });
 /* The title is cut out of the paper sheet: text in the SVG mask, sized to fit. */
 function fitTitle(){
   const svg = $("#sheet"), W = svg.clientWidth, H = svg.clientHeight; if (!W || !H) return;
@@ -1448,6 +1461,20 @@ function countries(){
   const rank = c => c.key === "_elsewhere" ? 1e12 : c.rec && typeof c.rec.order === "number" ? c.rec.order : 1e9 + Math.min(...c.places.map(ch => ch.s.order ?? 0));
   return [...out.values()].sort((a, b) => rank(a) - rank(b));
 }
+/* small flags next to country names */
+const FLAGS = {
+  norway: [22, 16, `<rect width="22" height="16" fill="#BA0C2F"/><path d="M6 0h4v16H6zM0 6h22v4H0z" fill="#fff"/><path d="M7 0h2v16H7zM0 7h22v2H0z" fill="#00205B"/>`],
+  scotland: [20, 12, `<rect width="20" height="12" fill="#005EB8"/><path d="M0 0L20 12M20 0L0 12" stroke="#fff" stroke-width="2.4"/>`],
+  england: [20, 12, `<rect width="20" height="12" fill="#fff"/><path d="M8.6 0h2.8v12H8.6zM0 4.6h20v2.8H0z" fill="#CE1124"/>`],
+  india: [30, 20, `<rect width="30" height="20" fill="#fff"/><rect width="30" height="6.67" fill="#FF9933"/><rect y="13.33" width="30" height="6.67" fill="#138808"/><circle cx="15" cy="10" r="2.6" fill="none" stroke="#000080" stroke-width=".7"/><circle cx="15" cy="10" r=".5" fill="#000080"/>`],
+  montenegro: [24, 12, `<rect width="24" height="12" fill="#D4AF37"/><rect x=".7" y=".7" width="22.6" height="10.6" fill="#C40308"/><path d="M12 3.1c-1.3 0-2.2.7-2.6 1.6-.8-.6-1.8-.5-2.2.2.9.1 1.4.7 1.6 1.4.3 1.4 1.5 2.4 3.2 2.6 1.7-.2 2.9-1.2 3.2-2.6.2-.7.7-1.3 1.6-1.4-.4-.7-1.4-.8-2.2-.2-.4-.9-1.3-1.6-2.6-1.6z" fill="#D4AF37"/>`],
+  austria: [18, 12, `<rect width="18" height="12" fill="#C8102E"/><rect y="4" width="18" height="4" fill="#fff"/>`],
+  "czech-republic": [18, 12, `<rect width="18" height="12" fill="#fff"/><rect y="6" width="18" height="6" fill="#D7141A"/><path d="M0 0l9 6-9 6z" fill="#11457E"/>`]
+};
+function flagSvg(key, cls = "cflag"){
+  const f = FLAGS[key]; if (!f) return "";
+  return `<svg class="${cls}" viewBox="0 0 ${f[0]} ${f[1]}" aria-hidden="true" style="aspect-ratio:${f[0]}/${f[1]}">${f[2]}</svg>`;
+}
 /* which country's page is showing: from the link (#india), else the first one */
 function currentCountry(cs){
   cs = cs || countries();
@@ -1462,7 +1489,7 @@ function renderCountrybar(){
   const key = cs.map(c => c.key + (c.soon ? "*" : "")).join() + "|" + (cur && cur.key);
   if (bar._key === key) return;
   bar._key = key;
-  bar.innerHTML = cs.filter(c => c.key !== "_elsewhere" || c.places.length).map(c => `<button type="button" class="cb${c.soon ? " soon" : ""}${cur && c.key === cur.key ? " on" : ""}" data-c="${esc(c.key)}" aria-pressed="${cur && c.key === cur.key}">${esc(c.name)}${c.soon ? ` <span class="sn">soon</span>` : ""}</button>`).join("");
+  bar.innerHTML = cs.filter(c => c.key !== "_elsewhere" || c.places.length).map(c => `<button type="button" class="cb${c.soon ? " soon" : ""}${cur && c.key === cur.key ? " on" : ""}" data-c="${esc(c.key)}" aria-pressed="${cur && c.key === cur.key}">${flagSvg(c.key)}${esc(c.name)}${c.soon ? ` <span class="sn">soon</span>` : ""}</button>`).join("");
   bar.querySelectorAll(".cb").forEach(b => b.onclick = () => goCountry(b.dataset.c));
 }
 const isPortrait = p => (p.h || 3) > (p.w || 4) * 1.05;
@@ -1837,12 +1864,13 @@ function countryHead(c){
   head.innerHTML = `<h2 class="c-name px-f" data-speed=".14" aria-label="${esc(c.name)}"><span aria-hidden="true">${letters(c.name)}</span></h2>` +
     (r && r.cutout && r.cw ? `<img class="c-cut" alt="" decoding="async" src="${blobUrl(r.cutout)}">` : "");
   if (r && r.video) head.prepend(bgVideo(r.video, r.videoPoster, "c-vid"));
+  if (FLAGS[c.key]) head.insertAdjacentHTML("afterbegin", flagSvg(c.key, "c-flag"));
   return head;
 }
 function soonPage(co){
   const sec = document.createElement("section"); sec.className = "country soon-page"; sec.id = "country-" + co.key;
   sec.style.setProperty("--len", String(Math.max(6, co.name.length)));
-  sec.innerHTML = `<h2 class="soon-name reveal">${esc(co.name)}<span class="soon-stamp">Coming soon</span></h2>
+  sec.innerHTML = `<h2 class="soon-name reveal">${flagSvg(co.key)}${esc(co.name)}<span class="soon-stamp">Coming soon</span></h2>
     <div class="pass reveal">
       <div class="pass-main">
         <div class="pass-head"><span>Boarding pass</span><span>Latitudes</span></div>
@@ -1858,7 +1886,7 @@ function nextStop(cs, co){
   const i = cs.indexOf(co), nx = cs[(i + 1) % cs.length];
   if (!nx || nx === co) return null;
   const d = document.createElement("div"); d.className = "next-stop reveal";
-  d.innerHTML = `<button type="button" class="ticket"><span><span class="k">Next stop${nx.soon ? " · coming soon" : ""}</span><span class="to">${esc(nx.name)}</span></span><span class="go">Continue →</span></button>`;
+  d.innerHTML = `<button type="button" class="ticket"><span><span class="k">Next stop${nx.soon ? " · coming soon" : ""}</span><span class="to">${flagSvg(nx.key)}${esc(nx.name)}</span></span><span class="go">Continue →</span></button>`;
   d.querySelector("button").onclick = () => goCountry(nx.key);
   return d;
 }
@@ -1936,7 +1964,7 @@ function buildJump(){
   if (stories && co && co.places.length > 1){
     h += `<h4>${esc(co.name)}</h4>` + co.places.map(({ s }, i) => `<button data-ch="${esc(s.id)}"><span class="mono">${pad2(i + 1)}</span><span>${esc(s.title === co.name ? co.name : s.title)}</span></button>`).join("");
   }
-  h += `<h4>Countries</h4>` + cs.filter(c => c.key !== "_elsewhere" || c.places.length).map(c => `<button data-c="${esc(c.key)}" class="${stories && co && c.key === co.key ? "on" : ""}"><span class="mono">${c.soon ? "soon" : ""}</span><span>${esc(c.name)}</span></button>`).join("");
+  h += `<h4>Countries</h4>` + cs.filter(c => c.key !== "_elsewhere" || c.places.length).map(c => `<button data-c="${esc(c.key)}" class="${stories && co && c.key === co.key ? "on" : ""}"><span class="mono">${c.soon ? "soon" : ""}</span><span>${flagSvg(c.key)}${esc(c.name)}</span></button>`).join("");
   box.innerHTML = h;
   box.querySelectorAll("button").forEach(b => b.onclick = () => {
     toggleChpill(false);
@@ -3188,6 +3216,68 @@ function cullPath(list, vb, tol, skipBox){
   }
   return p;
 }
+/* Terrain drawn on the paper maps: [type, lat, lng, size, label]. Types: mountains, forest,
+   dunes, glacier, hills, waves (sea), sea (a sea label only). */
+const TERRAIN = [
+  ["mountains", 61.55, 8.45, 1.2, "Jotunheimen"], ["mountains", 61.95, 9.85, .8, "Rondane"], ["mountains", 62.3, 9.4, .7, ""],
+  ["glacier", 61.7, 6.95, 1, "Jostedalsbreen"], ["hills", 60.15, 7.6, 1, "Hardangervidda"], ["forest", 60.75, 11.6, 1.1, ""], ["forest", 61.3, 11.9, .8, ""],
+  ["forest", 59.6, 9.6, .8, ""], ["mountains", 68.2, 14.2, .7, "Lofoten"], ["mountains", 64.6, 13.5, .7, ""],
+  ["sea", 57.8, 3.2, 1, "North Sea"], ["sea", 65.5, 4.5, 1, "Norwegian Sea"], ["waves", 59.2, 3.6, 1, ""], ["waves", 63.5, 6.0, 1, ""], ["waves", 56.4, 5.5, 1, ""],
+  ["mountains", 57.05, -5.0, 1.1, "Highlands"], ["mountains", 57.1, -3.6, .8, "Cairngorms"], ["forest", 56.6, -4.1, .8, ""], ["mountains", 55.3, -3.4, .5, ""],
+  ["mountains", 54.5, -3.1, .7, "Lake District"], ["hills", 54.0, -2.1, .9, "Pennines"], ["hills", 50.95, -0.5, .8, "South Downs"], ["forest", 50.87, -1.6, .6, ""],
+  ["hills", 51.8, -2.0, .7, "Cotswolds"], ["sea", 50.0, -2.2, .8, "English Channel"], ["sea", 54.3, -5.6, .7, "Irish Sea"], ["waves", 53.6, 1.8, 1, ""],
+  ["mountains", 32.6, 77.3, 1.3, "Himalaya"], ["mountains", 30.7, 79.4, 1.1, ""], ["mountains", 28.6, 84.0, 1.1, ""], ["mountains", 27.9, 88.4, 1, ""],
+  ["dunes", 26.9, 71.3, 1.2, "Thar Desert"], ["hills", 13.6, 75.0, .9, "Western Ghats"], ["hills", 10.8, 76.8, .7, ""], ["hills", 17.6, 77.6, .9, "Deccan"],
+  ["forest", 22.4, 80.8, 1, ""], ["forest", 21.9, 88.9, .8, "Sundarbans"], ["forest", 26.3, 92.8, .8, ""],
+  ["sea", 15.5, 67.5, 1, "Arabian Sea"], ["sea", 15.5, 87.0, 1, "Bay of Bengal"], ["waves", 11.0, 71.0, 1, ""], ["waves", 18.0, 89.5, 1, ""],
+  ["mountains", 43.1, 19.05, 1, "Durmitor"], ["mountains", 42.55, 19.75, .7, ""], ["sea", 42.0, 18.3, .8, "Adriatic Sea"], ["waves", 42.25, 17.9, 1, ""],
+  ["mountains", 47.15, 11.3, 1, "Alps"], ["mountains", 47.1, 13.4, .8, ""], ["forest", 49.5, 15.0, .8, "Bohemia"]
+];
+function terrainPal(){
+  const v = n => cssVar(n);
+  return { lite: v("--t-lite"), dark: v("--t-dark"), snow: v("--t-snow"), tree: v("--t-tree"), tree2: v("--t-tree2"), sand: v("--t-sand"), ice: v("--t-ice"), wave: v("--t-wave"), label: v("--t-label"), sea: v("--t-sea") };
+}
+/* little paper-cut glyphs: drawn in screen pixels so they stay the same size at any zoom */
+function drawGlyph(x, type, cx, cy, u, T, seed){
+  let r = seed >>> 0; const rnd = () => ((r = (r * 1664525 + 1013904223) >>> 0) / 4294967296);
+  if (type === "mountains"){
+    const n = 3 + Math.floor(rnd() * 2);
+    for (let i = 0; i < n; i++){
+      const ox = (i - (n - 1) / 2) * 11 * u + (rnd() - .5) * 4 * u, h = (13 + rnd() * 9) * u, bw = (10 + rnd() * 4) * u, by = cy + (i % 2 ? 3 : 0) * u;
+      const px = cx + ox, top = by - h;
+      x.fillStyle = T.lite; x.beginPath(); x.moveTo(px - bw, by); x.lineTo(px, top); x.lineTo(px, by); x.fill();
+      x.fillStyle = T.dark; x.beginPath(); x.moveTo(px, top); x.lineTo(px + bw, by); x.lineTo(px, by); x.fill();
+      x.fillStyle = T.snow; x.beginPath(); x.moveTo(px - bw * .32, top + h * .32); x.lineTo(px, top); x.lineTo(px + bw * .32, top + h * .32); x.lineTo(px + bw * .1, top + h * .26); x.lineTo(px - bw * .08, top + h * .34); x.fill();
+    }
+  } else if (type === "forest"){
+    for (let i = 0; i < 6; i++){
+      const px = cx + ((i % 3) - 1) * 9 * u + (rnd() - .5) * 3 * u, py = cy + (i < 3 ? -4 : 5) * u, h = (9 + rnd() * 4) * u, w = 4.2 * u;
+      x.fillStyle = i % 2 ? T.tree2 : T.tree; x.beginPath(); x.moveTo(px, py - h); x.lineTo(px + w, py); x.lineTo(px - w, py); x.fill();
+      x.fillRect(px - .7 * u, py, 1.4 * u, 2.2 * u);
+    }
+  } else if (type === "dunes"){
+    x.strokeStyle = T.sand; x.lineWidth = 1.6 * u; x.lineCap = "round";
+    for (let i = 0; i < 3; i++){
+      const py = cy + (i - 1) * 6 * u, ox = (i % 2 ? 6 : -4) * u;
+      x.beginPath(); x.moveTo(cx - 16 * u + ox, py); x.quadraticCurveTo(cx - 8 * u + ox, py - 6 * u, cx + ox, py); x.quadraticCurveTo(cx + 8 * u + ox, py - 6 * u, cx + 16 * u + ox, py); x.stroke();
+    }
+  } else if (type === "glacier"){
+    x.fillStyle = T.ice; x.beginPath(); x.ellipse(cx, cy, 17 * u, 8 * u, -.3, 0, Math.PI * 2); x.fill();
+    x.strokeStyle = T.snow; x.lineWidth = 1.2 * u;
+    for (let i = -1; i <= 1; i++){ x.beginPath(); x.moveTo(cx + i * 6 * u - 3 * u, cy - 3 * u); x.lineTo(cx + i * 6 * u + 2 * u, cy + 3 * u); x.stroke(); }
+  } else if (type === "hills"){
+    for (let i = 0; i < 3; i++){
+      const px = cx + (i - 1) * 11 * u, r2 = (6 + rnd() * 3) * u;
+      x.fillStyle = i % 2 ? T.dark : T.lite; x.beginPath(); x.arc(px, cy, r2, Math.PI, 0); x.fill();
+    }
+  } else if (type === "waves"){
+    x.strokeStyle = T.wave; x.lineWidth = 1.4 * u; x.lineCap = "round";
+    for (let i = 0; i < 3; i++){
+      const px = cx + (i - 1) * 10 * u, py = cy + (i % 2 ? 5 : -2) * u;
+      x.beginPath(); x.moveTo(px - 6 * u, py); x.quadraticCurveTo(px - 3 * u, py - 3.5 * u, px, py); x.quadraticCurveTo(px + 3 * u, py + 3.5 * u, px + 6 * u, py); x.stroke();
+    }
+  }
+}
 let GRAIN = null;
 function grainCanvas(){
   if (GRAIN) return GRAIN;
@@ -3406,8 +3496,8 @@ class MapView {
   buildPaper(){
     const W = this.canvas.width, H = this.canvas.height, d = this.dpr, s = this.view.s, k = this.paperK(), P = this.paperPal(), f = this.frame();
     if (!this.lay || this.lay[0].width !== W || this.lay[0].height !== H)
-      this.lay = [0, 1, 2, 3].map(() => { const c = document.createElement("canvas"); c.width = W; c.height = H; return c; });
-    const [rings, l1, l2, l3] = this.lay.map(c => { const x = c.getContext("2d"); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, W, H); return x; });
+      this.lay = [0, 1, 2].map(() => { const c = document.createElement("canvas"); c.width = W; c.height = H; return c; });
+    const [rings, l1, l2] = this.lay.map(c => { const x = c.getContext("2d"); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, W, H); return x; });
     const lite = !!this.opts.interactive;
     if (!lite){ rings.shadowColor = P.shadow; rings.shadowBlur = 5 * d * k; rings.shadowOffsetY = 1.4 * d * k; }
     rings.lineJoin = lite ? "bevel" : "round";
@@ -3416,12 +3506,34 @@ class MapView {
       this.eachPart(rings, f, path => { rings.lineWidth = 2 * px * k / s; rings.stroke(path); if (i === 2) rings.fill(path); });
     });
     l1.fillStyle = P.land[0]; this.eachPart(l1, f, path => l1.fill(path));
-    [[l2, 9, P.land[1]], [l3, 24, P.land[2]]].forEach(([x, e, col]) => {
-      x.fillStyle = col; this.eachPart(x, f, path => x.fill(path));
-      const w = e * k / s;
-      x.globalCompositeOperation = "destination-out"; x.lineJoin = "round"; x.lineWidth = 2 * w;
-      this.eachPart(x, f, path => x.stroke(path), w);
-      x.globalCompositeOperation = "source-over";
+    /* a soft inner shade along the coast gives the land some paper thickness */
+    l1.globalCompositeOperation = "source-atop"; l1.shadowColor = P.shadow; l1.shadowBlur = 12 * d * k;
+    l1.strokeStyle = P.land[1]; this.eachPart(l1, f, path => { l1.lineWidth = 2.5 * k / s; l1.stroke(path); });
+    l1.globalCompositeOperation = "source-over"; l1.shadowColor = "transparent";
+    this.drawTerrain(l2, rings);
+  }
+  drawTerrain(land, sea){
+    const s = this.view.s; if (s < .006) return;
+    const T = terrainPal(), d = this.dpr, u = d * Math.max(.75, Math.min(1.3, this.paperK() * 1.15));
+    const labels = s > .045, placed = [];
+    const pins = this.photos.map(p => { const [x, y] = merc(p.lat, p.lng); return this.toScreen(x, y); });
+    TERRAIN.forEach(([type, lat, lng, size, label], i) => {
+      const [wx, wy] = merc(lat, lng), [sx, sy] = this.toScreen(wx, wy);
+      if (sx < -60 || sy < -60 || sx > this.w + 60 || sy > this.h + 60) return;
+      if (placed.some(q => Math.hypot(q[0] - sx, q[1] - sy) < 38)) return;
+      if (type !== "sea" && pins.some(q => Math.hypot(q[0] - sx, q[1] - (sy - 20)) < 30)) return;
+      placed.push([sx, sy]);
+      const x = type === "waves" || type === "sea" ? sea : land, uu = u * size;
+      x.save(); x.setTransform(1, 0, 0, 1, 0, 0); x.shadowColor = "transparent";
+      if (type !== "sea") drawGlyph(x, type, sx * d, sy * d, uu, T, i * 7919 + 13);
+      if (labels && label){
+        const isSea = type === "sea";
+        x.font = `${isSea ? "italic 500" : "italic 500"} ${Math.round((isSea ? 13 : 12) * d * Math.min(1.15, size + .15))}px Newsreader, Georgia, serif`;
+        x.textAlign = "center"; x.fillStyle = isSea ? T.sea : T.label;
+        const txt = isSea ? label.toUpperCase().split("").join("\u200a") : label;
+        x.fillText(txt, sx * d, sy * d + (isSea ? 0 : 13 * uu));
+      }
+      x.restore();
     });
   }
   composite(x, pop){
@@ -3792,6 +3904,22 @@ $("#locClear").addEventListener("click", async () => {
   if (await save(db.collection("photos").doc(p.id), { lat: null, lng: null })){ closePicker(); toast("Location removed."); }
 });
 
+/* ================= visitor counter ================= */
+/* GoatCounter: counts visits with no cookies and no personal data. Only on the public
+   static copy, and only when site/settings has analytics.goatcounter set (the site code).
+   Country pages are counted as /#norway, /#india and so on. */
+function startCounter(){
+  const code = ((S.settings.analytics || {}).goatcounter || "").trim();
+  if (!code || !/^[a-z0-9-]+$/i.test(code) || /^(localhost|127\.|\[::1\])/.test(location.hostname)) return;
+  window.goatcounter = { no_onload: true };
+  const sc = document.createElement("script");
+  sc.async = true; sc.src = "https://gc.zgo.at/count.js"; sc.dataset.goatcounter = `https://${code}.goatcounter.com/count`;
+  const hit = () => { try { window.goatcounter.count({ path: location.pathname + location.hash }); } catch (e) {} };
+  sc.onload = hit;
+  document.head.append(sc);
+  addEventListener("hashchange", () => { if (window.goatcounter && window.goatcounter.count) hit(); });
+}
+
 /* ================= static copy ================= */
 /* Outside claude.ai the page looks for journal.json beside it (written by
    tools/export_static.py), so the same file can be hosted anywhere, read-only. */
@@ -3806,6 +3934,7 @@ async function loadStatic(){
     S.settings = { name: "Aaditya", title: "Latitudes", featured: [], ...((d.site || {}).settings || {}) };
     S.loaded.photos = S.loaded.sections = true;
     renderAll();
+    startCounter();
     return true;
   } catch (e){ return false; }
 }
